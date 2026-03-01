@@ -21,7 +21,18 @@ ORDER BY rt.price_per_hour ASC, r.room_number ASC";
 $res = $mysqli->query($sql);
 $rooms = [];
 if ($res) {
-    while ($row = $res->fetch_assoc()) $rooms[] = $row;
+    while ($row = $res->fetch_assoc()) $rooms[] = [
+        'room_id'        => intval($row['room_id']),
+        'room_number'    => intval($row['room_number']),
+        'status'         => $row['status'],
+        'is_active'      => intval($row['is_active']),
+        'type_name'      => $row['type_name'],
+        'price_per_hour' => floatval($row['price_per_hour']),
+        'price_per_30min'=> floatval($row['price_per_30min']),
+        'rental_id'      => $row['rental_id'] !== null ? intval($row['rental_id']) : null,
+        'started_at'     => $row['started_at'],
+        'total_minutes'  => $row['total_minutes'] !== null ? intval($row['total_minutes']) : null,
+    ];
     $res->free();
 }
 echo json_encode(['success'=>true,'rooms'=>$rooms]);
