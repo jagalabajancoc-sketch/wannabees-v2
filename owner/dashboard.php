@@ -760,6 +760,9 @@ foreach ($rooms as $r) {
           card.className = 'room-card ' + room.status.toLowerCase();
           card.querySelector('.room-status-text').textContent = room.status;
           
+          // Update card data FIRST so startTimer reads fresh data
+          card.setAttribute('data-room', JSON.stringify(room));
+          
           // Update timer display for occupied rooms
           const timeEl = card.querySelector('.room-time');
           if (room.status === 'OCCUPIED' && room.started_at) {
@@ -786,7 +789,6 @@ foreach ($rooms as $r) {
             timeEl.remove();
           }
           
-          card.setAttribute('data-room', JSON.stringify(room));
           card.style.animation = 'pulse 0.3s ease';
           setTimeout(() => { card.style.animation = ''; }, 300);
         }
